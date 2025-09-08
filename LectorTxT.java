@@ -6,18 +6,12 @@ import java.io.*;
 import java.util.List;
 
 public class LectorTxT {
-    private boolean checkFile(String filePath){
+    public static boolean checkFile(String filePath){
         File ruta = new File(filePath);
-        if (ruta.exists()){
-            System.out.println("El archivo existe");
-            return true;
-        }
-        else {
-            System.out.println("No eciste el archivo");
-            return false;
-        }
+        return ruta.exists() && ! ruta.isDirectory() && ! filePath.contentEquals("");
     }
-    public String[] getCadenas(String filePath){
+
+    public static String[] getCadenas(String filePath){
         if(!checkFile(filePath)){return null;}
         List<String> cadenas = new ArrayList<>();
         try (Scanner sc = new Scanner(new File(filePath))){
@@ -26,9 +20,11 @@ public class LectorTxT {
                 if (cadenabase.contains(" ") || cadenabase.contains("\t")){
                     String[] subcadenas = cadenabase.split("\\s+");
                     cadenas.addAll(Arrays.asList(subcadenas));
+                    /*
                     for (String palabra : subcadenas) {
                         System.out.println(palabra);
                     }
+                     */
                 }
                 else {
                     cadenas.add(cadenabase);
@@ -39,7 +35,7 @@ public class LectorTxT {
         }
         return cadenas.toArray(new String[0]);
     }
-    public void saveFile(String fileOutput, String[] datos){
+    public static void saveFile(String fileOutput, String[] datos){
         checkFile(fileOutput);
         try(PrintWriter grabador = new PrintWriter(new File(fileOutput))){
             for (String d: datos){
